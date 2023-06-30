@@ -1,9 +1,11 @@
+"use client";
+
 import { Template } from "@/templates";
 
-export default function Home() {
+export default function Categories() {
   return (
     <Template.Default>
-      <h1>Dashboard</h1>
+      <h1>Opa</h1>
     </Template.Default>
   );
 }
