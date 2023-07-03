@@ -12,7 +12,7 @@ export function DefaultTemplate({ children }: IDefaultTemplateProps) {
       </Layout.Sider>
       <Layout>
         <Layout.Content className="my-4 mx-4">
-          <div className="p-6 min-h-[360px] bg-white">{children}</div>
+          <div className="p-6 min-h-full bg-white">{children}</div>
         </Layout.Content>
       </Layout>
     </Layout>

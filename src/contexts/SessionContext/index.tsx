@@ -4,7 +4,7 @@ import { createContext, useCallback, useEffect, useState } from "react";
 import { ISessionContext, IsSessionContextProvider } from "./interface";
 import { UserDTO } from "@/api/types";
 import { useFetchAuthenticate } from "@/hooks/api";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { message } from "antd";
 import { TOKEN_STORAGE_KEY, USER_STORAGE_KEY } from "@/configs/sessionConfig";
 import { api } from "@/services/api";
@@ -13,6 +13,7 @@ export const SessionContext = createContext({} as ISessionContext);
 
 export function SessionContextProvider({ children }: IsSessionContextProvider) {
   const { push } = useRouter();
+  const pathname = usePathname();
 
   const [token, setToken] = useState<string>();
   const [user, setUser] = useState<UserDTO>();
@@ -60,13 +61,20 @@ export function SessionContextProvider({ children }: IsSessionContextProvider) {
       removeUserOnStorage();
       setToken(undefined);
       setUser(undefined);
-      push("/auth/login");
+      if (!pathname.includes("/auth")) {
+        push("/auth/login");
+      }
       return;
     }
 
     setToken(token);
     setUser(JSON.parse(user));
-  }, [removeTokenOnStorageAndApiBearerToken, push, removeUserOnStorage]);
+  }, [
+    removeTokenOnStorageAndApiBearerToken,
+    push,
+    removeUserOnStorage,
+    pathname,
+  ]);
 
   return (
     <SessionContext.Provider

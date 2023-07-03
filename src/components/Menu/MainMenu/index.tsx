@@ -8,8 +8,6 @@ type MenuItem = Required<MenuProps>["items"];
 export function MainMenu() {
   const pathname = usePathname();
 
-  console.log(pathname);
-
   const { push } = useRouter();
 
   const ITEMS: MenuItem = [
