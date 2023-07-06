@@ -1,8 +1,7 @@
 import { CategoryType } from "@/api/types";
 import { Button, Form, Input, Select } from "antd";
 import { CategoryFormProps, CategoryFormValues } from "./interface";
-import { useFetchCreateCategory } from "@/hooks/api";
-import { useFetchUpdateCategory } from "@/hooks/api/categories/useFetchUpdateCategory";
+import { useFetchCreateCategory, useFetchUpdateCategory } from "@/hooks/api";
 
 const CATEGORY_TYPE_OPTIONS = [
   { label: "Receita", value: CategoryType.INCOME },

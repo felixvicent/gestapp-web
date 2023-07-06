@@ -1,20 +1,24 @@
-import { CategoryDTO, CategoryType } from "@/api/types";
+import { CategoryDTO, TransactionDTO } from "@/api/types";
 import { Modal } from "@/components/Modal";
-import { useFetchGetCategories } from "@/hooks/api";
-import { useFetchDeleteCategory } from "@/hooks/api/categories/useFetchDeleteCategory";
+import {
+  useFetchDeleteTransaction,
+  useFetchGetTransactions,
+} from "@/hooks/api";
 import { useSession } from "@/hooks/useSession";
-import { Button, Dropdown, Table, Typography, Modal as ModalAntd } from "antd";
+import { formatCurrency } from "@/utils/formatCurrency";
+import { formatDatetime } from "@/utils/formatDatetime";
+import { Dropdown, Table, Typography, Modal as ModalAntd, Button } from "antd";
 import { useState } from "react";
 import { AiOutlineDelete, AiOutlineEdit, AiOutlineMore } from "react-icons/ai";
 
-export function CategoriesTable() {
+export function TransactionsTable() {
   const { token } = useSession();
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedCategoryToUpdate, setSelectedCategoryToUpdate] =
-    useState<CategoryDTO>();
+  const [selectedTransactionToUpdate, setSelectedTransactionToUpdate] =
+    useState<TransactionDTO>();
 
-  const { data } = useFetchGetCategories({
+  const { data } = useFetchGetTransactions({
     dependencyArray: [currentPage],
     payload: {
       page: currentPage - 1,
@@ -24,35 +28,44 @@ export function CategoriesTable() {
     },
   });
 
-  const { mutate: fetchDeleteCategory } = useFetchDeleteCategory({});
+  const { mutate: fetchDeleteTransaction } = useFetchDeleteTransaction({});
 
-  function handleRemove(categoryId: string) {
-    fetchDeleteCategory({
+  function handleRemove(transactionId: string) {
+    fetchDeleteTransaction({
       path: {
-        id: categoryId,
+        id: transactionId,
       },
     });
   }
 
   const COLUMNS = [
-    { title: "Nome", dataIndex: "title", key: "title" },
     {
-      title: "Tipo",
-      dataIndex: "type",
-      key: "type",
-      render: (type: string) => {
-        switch (type) {
-          case CategoryType.INCOME:
-            return "Receita";
-          case CategoryType.EXPENSE:
-            return "Despesa";
-        }
-      },
+      title: "Descrição",
+      key: "description",
+      dataIndex: "description",
+    },
+    {
+      title: "Valor",
+      key: "value",
+      dataIndex: "value",
+      render: (value: string) => `R$ ${formatCurrency(Number(value))}`,
+    },
+    {
+      title: "Data/hora",
+      key: "datetime",
+      dataIndex: "datetime",
+      render: (value: string) => `${formatDatetime(value)}`,
+    },
+    {
+      title: "Categoria",
+      key: "category",
+      dataIndex: "category",
+      render: (category: CategoryDTO) => category.title,
     },
     {
       title: "",
       width: "4rem",
-      render: (_: any, item: CategoryDTO) => {
+      render: (_: any, item: TransactionDTO) => {
         return (
           <Dropdown
             trigger={["click"]}
@@ -65,7 +78,7 @@ export function CategoriesTable() {
                   label: (
                     <Typography className="text-blue-500">Editar</Typography>
                   ),
-                  onClick: () => setSelectedCategoryToUpdate(item),
+                  onClick: () => setSelectedTransactionToUpdate(item),
                 },
                 {
                   key: "remove-category",
@@ -75,7 +88,7 @@ export function CategoriesTable() {
                   ),
                   onClick: () =>
                     ModalAntd.confirm({
-                      title: `Deseja remover a categoria ${item.title}?`,
+                      title: `Deseja remover a transação ${item.description}?`,
                       onOk: () => handleRemove(item.id),
                       okText: "Confirmar",
                       okType: "danger",
@@ -97,8 +110,8 @@ export function CategoriesTable() {
     <>
       <Table
         dataSource={data?.content}
+        rowKey={"id"}
         columns={COLUMNS}
-        rowKey="id"
         pagination={{
           current: currentPage,
           total: data?.totalElements,
@@ -106,16 +119,18 @@ export function CategoriesTable() {
           onChange: (page) => setCurrentPage(page),
         }}
       />
-
-      <Modal.CategoryForm
-        isOpen={!!selectedCategoryToUpdate}
-        onClose={() => setSelectedCategoryToUpdate(undefined)}
-        title="Editando categoria"
+      <Modal.TransactionForm
+        isOpen={!!selectedTransactionToUpdate}
+        onClose={() => setSelectedTransactionToUpdate(undefined)}
+        title="Editando transação"
         formProps={{
           initialValues: {
-            id: selectedCategoryToUpdate?.id,
-            title: selectedCategoryToUpdate?.title ?? "",
-            type: selectedCategoryToUpdate?.type ?? "",
+            description: selectedTransactionToUpdate?.description ?? "",
+            value: selectedTransactionToUpdate?.value ?? 0,
+            categoryId: selectedTransactionToUpdate?.category.id ?? "",
+            datetime: selectedTransactionToUpdate?.datetime ?? "",
+            id: selectedTransactionToUpdate?.id,
+            type: selectedTransactionToUpdate?.category.type ?? "Receita",
           },
         }}
       />

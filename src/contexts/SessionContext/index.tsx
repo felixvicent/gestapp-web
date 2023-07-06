@@ -18,9 +18,13 @@ export function SessionContextProvider({ children }: IsSessionContextProvider) {
   const [token, setToken] = useState<string>();
   const [user, setUser] = useState<UserDTO>();
 
+  function setApiBearerToken(token: string) {
+    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  }
+
   const setTokenOnStorageAndApiBearerToken = useCallback((token: string) => {
     localStorage.setItem(TOKEN_STORAGE_KEY, token);
-    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    setApiBearerToken(token);
   }, []);
 
   const setUserOnStorage = useCallback((user: UserDTO) => {
@@ -68,6 +72,7 @@ export function SessionContextProvider({ children }: IsSessionContextProvider) {
     }
 
     setToken(token);
+    setApiBearerToken(token);
     setUser(JSON.parse(user));
   }, [
     removeTokenOnStorageAndApiBearerToken,

@@ -4,5 +4,5 @@ export interface CategoryModalProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
-  formProps: Omit<CategoryFormProps, "onCancel">;
+  formProps?: Omit<CategoryFormProps, "onCancel">;
 }

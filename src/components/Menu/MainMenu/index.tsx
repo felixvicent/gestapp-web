@@ -1,5 +1,5 @@
 import { Menu, MenuProps } from "antd";
-import { BiCategoryAlt } from "react-icons/bi";
+import { BiCategoryAlt, BiTransfer } from "react-icons/bi";
 import { AiOutlineDashboard } from "react-icons/ai";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -16,6 +16,12 @@ export function MainMenu() {
       key: "/",
       icon: <AiOutlineDashboard />,
       onClick: () => push("/"),
+    },
+    {
+      label: "Transações",
+      key: "/transactions",
+      icon: <BiTransfer />,
+      onClick: () => push("/transactions"),
     },
     {
       label: "Categorias",
