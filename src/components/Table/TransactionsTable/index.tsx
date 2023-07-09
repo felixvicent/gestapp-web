@@ -1,4 +1,4 @@
-import { CategoryDTO, TransactionDTO } from "@/api/types";
+import { CategoryDTO, CategoryType, TransactionDTO } from "@/api/types";
 import { Modal } from "@/components/Modal";
 import {
   useFetchDeleteTransaction,
@@ -117,6 +117,7 @@ export function TransactionsTable() {
           total: data?.totalElements,
           pageSize: data?.size,
           onChange: (page) => setCurrentPage(page),
+          showSizeChanger: false,
         }}
       />
       <Modal.TransactionForm
@@ -130,7 +131,9 @@ export function TransactionsTable() {
             categoryId: selectedTransactionToUpdate?.category.id ?? "",
             datetime: selectedTransactionToUpdate?.datetime ?? "",
             id: selectedTransactionToUpdate?.id,
-            type: selectedTransactionToUpdate?.category.type ?? "Receita",
+            type:
+              selectedTransactionToUpdate?.category.type ??
+              CategoryType.EXPENSE,
           },
         }}
       />

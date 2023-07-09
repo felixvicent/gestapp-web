@@ -5,6 +5,9 @@ export * from "./CategoryForm";
 export * from "./CategoryType";
 export * from "./CreateUserForm";
 
+export * from "./GraphicDTO";
+export * from "./GraphicValueDTO";
+
 export * from "./Page";
 
 export * from "./TokenDTO";

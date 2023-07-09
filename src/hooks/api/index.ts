@@ -13,6 +13,12 @@ export * from "./categories/useFetchGetCategories";
 export * from "./categories/useFetchUpdateCategory/interface";
 export * from "./categories/useFetchUpdateCategory";
 
+export * from "./dashboard/useFetchGetDashboardGraphicExpense/interface";
+export * from "./dashboard/useFetchGetDashboardGraphicExpense";
+
+export * from "./dashboard/useFetchGetDashboardGraphicIncome/interface";
+export * from "./dashboard/useFetchGetDashboardGraphicIncome";
+
 export * from "./transactions/useFetchCreateTransaction/interface";
 export * from "./transactions/useFetchCreateTransaction";
 

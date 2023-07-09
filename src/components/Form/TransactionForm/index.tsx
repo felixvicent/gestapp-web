@@ -11,8 +11,8 @@ import dayjs from "dayjs";
 import { formatCurrency } from "@/utils/formatCurrency";
 
 const CATEGORY_TYPE_OPTIONS = [
-  { label: "Receita", value: CategoryType.INCOME },
-  { label: "Despesa", value: CategoryType.EXPENSE },
+  { key: 1, label: "Receita", value: CategoryType.INCOME },
+  { key: 2, label: "Despesa", value: CategoryType.EXPENSE },
 ];
 
 export function TransactionForm({
@@ -22,7 +22,7 @@ export function TransactionForm({
     value: 0,
     datetime: "",
     categoryId: "",
-    type: "",
+    type: CategoryType.EXPENSE,
   },
 }: TransactionFormProps) {
   function parseDate(value: string) {
@@ -33,7 +33,7 @@ export function TransactionForm({
   }
 
   const [categoryType, setCategoryType] = useState<CategoryType>(
-    CategoryType.INCOME
+    initialValues.type
   );
 
   const currencyFormatter = (value: any) => {
@@ -125,7 +125,7 @@ export function TransactionForm({
         label: category.title,
         value: category.id,
       }));
-  }, [categoryType, data]);
+  }, [data, categoryType]);
 
   function handleSubmit(formData: TransactionFormValues) {
     const body = {
@@ -186,7 +186,11 @@ export function TransactionForm({
         <DatePicker className="w-full" format={"DD/MM/YYYY"} />
       </Form.Item>
 
-      <Form.Item label="Tipo" name="type">
+      <Form.Item
+        label="Tipo"
+        name="type"
+        rules={[{ required: true, message: "Por favor, insira o tipo" }]}
+      >
         <Select
           options={CATEGORY_TYPE_OPTIONS}
           onChange={(_, option) => handleChangeType(option)}
@@ -197,7 +201,7 @@ export function TransactionForm({
       <Form.Item
         label="Categoria"
         name="categoryId"
-        rules={[{ required: true, message: "Por favor, insira a data" }]}
+        rules={[{ required: true, message: "Por favor, insira a categoria" }]}
       >
         <Select options={OPTIONS} placeholder="Receita" />
       </Form.Item>
