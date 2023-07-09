@@ -1,6 +1,7 @@
 import { Modal } from "antd";
 import { TransactionModalProps } from "./interface";
 import { Form } from "@/components/Form";
+import { CategoryType } from "@/api/types";
 
 export function TransactionFormModal({
   isOpen,
@@ -12,7 +13,7 @@ export function TransactionFormModal({
       value: 0,
       datetime: "",
       categoryId: "",
-      type: "",
+      type: CategoryType.EXPENSE,
     },
   },
 }: TransactionModalProps) {
